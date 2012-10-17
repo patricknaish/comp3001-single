@@ -1,0 +1,15 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+<head>
+<title>Knurled Widgets Website Tools</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</head>
+<body>
+<h1>Knurled Widgets Website Tools</h1>
+<form method="get" action="http://localhost" enctype="multipart/form-data">
+<em>Path for the datasheet hierarchy root?</em><br><input type="text" name="datasheetPath" value="./datasheets" /><p><em>Apache Log file path name?</em><br><input type="text" name="logPath" value="access.log" /><p><em>List datasheets which occur</em><br><label><input type="checkbox" name="datasheetOccurrence" value="in_pdf" />in_pdf</label><br /><label><input type="checkbox" name="datasheetOccurrence" value="in_doc" />in_doc</label><br /><label><input type="checkbox" name="datasheetOccurrence" value="in_both" checked="checked" />in_both</label><br /><p><em>Apache log count of pdf request and doc requests for datasheets in both formats</em><br><label><input type="radio" name="logCount" value="yes" checked="checked" />yes</label><label><input type="radio" name="logCount" value="no" />no</label><p><input type="reset"  name=".reset" /><input type="submit" name="Action" value="Submit" /><div><input type="hidden" name=".cgifields" value="datasheetOccurrence"  /><input type="hidden" name=".cgifields" value="logCount"  /></div></form><hr>
+<h2>List of pdf datasheets</h2><h2>List of doc datasheets</h2><h2>List of dual format datasheets</h2><h2>Number of pdf requests for dual format datasheets = </h2><h2>Number of doc requests for dual format datasheets = </h2>
+</body>
+</html>
