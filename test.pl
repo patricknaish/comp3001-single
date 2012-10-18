@@ -5,7 +5,7 @@ $startPath = shift or die "No arguments provided";
 listFiles($startPath);
 
 sub listFiles{
-	$path = shift;
+	my $path = shift;
 
 	opendir(DIR, $path) or die "Could not open $path";
 	
@@ -14,6 +14,7 @@ sub listFiles{
 
 	foreach $file(@files) {
 		if (-f $file) {
+			$file =~ s/^$startPath//;
 			print "$file\n";
 		}
 		elsif (-d $file) {
