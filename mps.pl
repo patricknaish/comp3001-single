@@ -45,6 +45,8 @@
 
 		sub process {
 
+			$method = $ENV{'REQUEST_METHOD'};
+
 			print "<h2>List of pdf datasheets</h2>";
 			#do stuff
 

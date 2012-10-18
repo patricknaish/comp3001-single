@@ -9,10 +9,8 @@ sub listFiles{
 
 	opendir(DIR, $path) or die "Could not open $path";
 	
-	my @files = grep !/^(\.|\.\.)$/, readdir(DIR);
+	my @files = map("$path/$_", grep (!/^\.{1,2}$/, readdir(DIR)));
 	closedir(DIR);
-
-	@files = map("$path/$_", @files);
 
 	foreach $file(@files) {
 		if (-f $file) {
