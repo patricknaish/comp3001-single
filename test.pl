@@ -14,7 +14,7 @@ sub listFiles{
 
 	foreach $file(@files) {
 		if (-f $file) {
-			$file =~ s/^$startPath//;
+			$file =~ s/^$startPath\///;
 			print "$file\n";
 		}
 		elsif (-d $file) {
