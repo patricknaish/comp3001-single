@@ -56,6 +56,7 @@
 		if (@datasheetOccurrence) {
 			
 			listFiles($datasheetPath);
+			getMatching(@pdfs, @docs);
 		
 			if (grep(/^in_pdf$/, @datasheetOccurrence)) {
 
@@ -72,8 +73,6 @@
 			}
 
 			if (grep(/^in_both$/, @datasheetOccurrence)) {
-				
-				getMatching(@pdfs, @docs);
 
 				print "<h2>List of dual format datasheets</h2>";
 				print @both;
