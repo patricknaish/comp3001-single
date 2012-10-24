@@ -32,11 +32,11 @@ sub listFiles{
 			$file =~ s/^$startPath\///;
 			if ($file =~ m/^.*\.pdf$/i) {
 				$file =~ s/\.pdf$//i;
-				push(@pdfs, $file . "\n");
+				push(@pdfs, $file . "<br />");
 			}
 			elsif ($file =~ m/^.*\.doc$/i) {
 				$file =~ s/\.doc$//i;
-				push(@docs, $file . "\n");
+				push(@docs, $file . "<br />");
 			}
 		}
 		elsif (-d $file) {

@@ -139,6 +139,8 @@
 			$matching{$_}++;
 		}
 
+		print "%matching";
+
 		push(@both, $_) for (grep {$matching{$_} > 1} keys %matching);
 
 		@both = sort(@both);
