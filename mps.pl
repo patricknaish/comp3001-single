@@ -56,7 +56,6 @@
 		if (@datasheetOccurrence) {
 			
 			listFiles($datasheetPath);
-			getMatching(@pdfs, @docs);
 		
 			if (grep(/^in_pdf$/, @datasheetOccurrence)) {
 
@@ -74,6 +73,7 @@
 
 			if (grep(/^in_both$/, @datasheetOccurrence)) {
 
+				getMatching(\@pdfs, \@docs);
 				print "<h2>List of dual format datasheets</h2>";
 				print @both;
 
@@ -131,17 +131,12 @@
 		my @arr2 = @{$ref_arr2};
 		my $matching = {};
 
-		print @arr1;
-		print @arr2;
-
 		for (@arr1) {
 			$matching{$_}++;
 		}
 		for (@arr2) {
 			$matching{$_}++;
 		}
-
-		print $matching;
 
 		push(@both, $_) for (grep {$matching{$_} > 1} keys %matching);
 
