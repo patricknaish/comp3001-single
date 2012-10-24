@@ -46,6 +46,7 @@
 		sub process {
 
 			$method = $ENV{'REQUEST_METHOD'};
+			$query = $ENV{'QUERY_STRING'};
 
 			print "<h2>List of pdf datasheets</h2>";
 			#do stuff
