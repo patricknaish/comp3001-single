@@ -48,27 +48,37 @@
 		my $method = $ENV{'REQUEST_METHOD'};
 		my $query = $ENV{'QUERY_STRING'};
 
+		my $datasheetPath = param('datasheetPath');
+		my $logPath = param('logPath');
 		my @datasheetOccurrence = param('datasheetOccurrence');
 		my @logCount = param('logCount');
 
-		if (grep(/^in_pdf$/, @datasheetOccurrence)) {
-
-			print "<h2>List of pdf datasheets</h2>";
-			#do stuff
-
-		}
-
-		if (grep(/^in_doc$/, @datasheetOccurrence)) {
-		
-			print "<h2>List of doc datasheets</h2>";
-			#do stuff
-
-		}
-
-		if (grep(/^in_both$/, @datasheetOccurrence)) {
+		if (scalar(@datasheetOccurrence) > 0) {
 			
-			print "<h2>List of dual format datasheets</h2>";
-			#do stuff
+			listFiles($logPath);
+		
+			if (grep(/^in_pdf$/, @datasheetOccurrence)) {
+
+				print "<h2>List of pdf datasheets</h2>";
+				print @pdfs;
+
+			}
+
+			if (grep(/^in_doc$/, @datasheetOccurrence)) {
+			
+				print "<h2>List of doc datasheets</h2>";
+				print @docs;
+
+			}
+
+			if (grep(/^in_both$/, @datasheetOccurrence)) {
+				
+				getMatching(@pdfs, @docs);
+
+				print "<h2>List of dual format datasheets</h2>";
+				print @both;
+
+			}
 
 		}
 
@@ -83,7 +93,7 @@
 			print "</h2>";
 
 		}
-		
+
 	}
 
 	sub listFiles{
@@ -98,11 +108,11 @@
 				$file =~ s/^$startPath\///;
 				if ($file =~ m/^.*\.pdf$/i) {
 					$file =~ s/\.pdf$//i;
-					push(@pdfs, $file . "\n");
+					push(@pdfs, $file . "<br />");
 				}
 				elsif ($file =~ m/^.*\.doc$/i) {
 					$file =~ s/\.doc$//i;
-					push(@docs, $file . "\n");
+					push(@docs, $file . "<br />");
 				}
 			}
 			elsif (-d $file) {
