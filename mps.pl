@@ -50,6 +50,10 @@
 
 		print $query;
 
+		my @datasheetOccurrence = param("datasheetOccurrence");
+
+		print $datasheetOccurrence;
+		
 		print "<h2>List of pdf datasheets</h2>";
 		#do stuff
 
