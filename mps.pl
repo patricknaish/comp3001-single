@@ -45,12 +45,11 @@
 
 	sub process {
 
-		$method = $ENV{'REQUEST_METHOD'};
-		$query = $ENV{'QUERY_STRING'};
-
-		print $query;
+		my $method = $ENV{'REQUEST_METHOD'};
+		my $query = $ENV{'QUERY_STRING'};
 
 		my @datasheetOccurrence = param('datasheetOccurrence');
+		my @logCount = param('logCount');
 
 		if (grep(/^in_pdf$/, @datasheetOccurrence)) {
 
@@ -73,13 +72,18 @@
 
 		}
 
-		print "<h2>Number of pdf requests for dual format datasheets = ";
-		#do stuff
-		print "</h2>";
+		if (grep(/^yes$/, @logCount)) {
 
-		print "<h2>Number of doc requests for dual format datasheets = ";
-		#do stuff
-		print "</h2>";
+			print "<h2>Number of pdf requests for dual format datasheets = ";
+			#do stuff
+			print "</h2>";
+
+			print "<h2>Number of doc requests for dual format datasheets = ";
+			#do stuff
+			print "</h2>";
+
+		}
+		
 	}
 
 	sub listFiles{
