@@ -52,16 +52,26 @@
 
 		my @datasheetOccurrence = param('datasheetOccurrence');
 
-		print scalar(@datasheetOccurrence);
+		if (grep(/^in_pdf$/, @datasheetOccurrence)) {
 
-		print "<h2>List of pdf datasheets</h2>";
-		#do stuff
+			print "<h2>List of pdf datasheets</h2>";
+			#do stuff
 
-		print "<h2>List of doc datasheets</h2>";
-		#do stuff
+		}
 
-		print "<h2>List of dual format datasheets</h2>";
-		#do stuff
+		if (grep(/^in_doc$/, @datasheetOccurrence)) {
+		
+			print "<h2>List of doc datasheets</h2>";
+			#do stuff
+
+		}
+
+		if (grep(/^in_both$/, @datasheetOccurrence)) {
+			
+			print "<h2>List of dual format datasheets</h2>";
+			#do stuff
+
+		}
 
 		print "<h2>Number of pdf requests for dual format datasheets = ";
 		#do stuff
