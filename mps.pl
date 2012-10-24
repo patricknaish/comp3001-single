@@ -139,7 +139,7 @@
 			$matching{$_}++;
 		}
 
-		print "%matching";
+		print %matching;
 
 		push(@both, $_) for (grep {$matching{$_} > 1} keys %matching);
 
