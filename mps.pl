@@ -131,6 +131,9 @@
 		my @arr2 = @{$ref_arr2};
 		my $matching = {};
 
+		print @arr1;
+		print @arr2;
+
 		for (@arr1) {
 			$matching{$_}++;
 		}
@@ -138,7 +141,7 @@
 			$matching{$_}++;
 		}
 
-		print %matching;
+		print $matching;
 
 		push(@both, $_) for (grep {$matching{$_} > 1} keys %matching);
 
