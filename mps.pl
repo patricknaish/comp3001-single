@@ -55,7 +55,7 @@
 
 		if (@datasheetOccurrence) {
 			
-			listFiles($logPath);
+			listFiles($datasheetPath);
 		
 			if (grep(/^in_pdf$/, @datasheetOccurrence)) {
 
