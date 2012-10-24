@@ -53,7 +53,7 @@
 		my @datasheetOccurrence = param('datasheetOccurrence');
 		my @logCount = param('logCount');
 
-		if (scalar(@datasheetOccurrence) > 0) {
+		if (@datasheetOccurrence) {
 			
 			listFiles($logPath);
 		
