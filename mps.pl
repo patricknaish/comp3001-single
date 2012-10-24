@@ -1,8 +1,8 @@
-#!/usr/bin/perl 
+#!/usr/bin/perl -w
 ##
 
 
-		use CGI ':standard';
+		use CGI qw(:standard);
 		print header;
 		print start_html("Knurled Widgets Website Tools"); #from CGI sends the top of the web page
 		print "<h1>Knurled Widgets Website Tools</h1>\n";
