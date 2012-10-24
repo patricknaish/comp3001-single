@@ -48,7 +48,7 @@
 		my $method = $ENV{'REQUEST_METHOD'};
 		my $query = $ENV{'QUERY_STRING'};
 
-		my $datasheetPath = param('datasheetPath');
+		$datasheetPath = param('datasheetPath');
 		my $logPath = param('logPath');
 		my @datasheetOccurrence = param('datasheetOccurrence');
 		my @logCount = param('logCount');
@@ -105,7 +105,7 @@
 
 		foreach $file(@files) {
 			if (-f $file) {
-				$file =~ s/^$startPath\///;
+				$file =~ s/^$datasheetPath\///;
 				if ($file =~ m/^.*\.pdf$/i) {
 					$file =~ s/\.pdf$//i;
 					push(@pdfs, $file . "<br />");
