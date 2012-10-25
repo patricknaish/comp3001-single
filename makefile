@@ -1,5 +1,5 @@
-.PHONY: test
+.PHONY: pdf
 
-test:
-	rm test.html
-	perl mps.pl > test.html
+pdf: 
+	pdflatex report.tex
+	

@@ -42,7 +42,7 @@
 						-values=>['yes', 'no'],
 						-default=>'yes');
 
-		print "<p>",reset;
+		print "<p>", reset;
 		print submit('Action','Submit');
       
 		print end_form;
