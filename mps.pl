@@ -84,7 +84,9 @@
 
 		if (grep(/^yes$/, @logCount)) {
 
-			listFiles($datasheetPath, $datasheetPath);
+			if (!@pdfs) {
+				listFiles($datasheetPath, $datasheetPath);
+			}
 			my @both = getMatching(\@pdfs, \@docs);
 
 			my ($doccount, $pdfcount) = parseLog($logPath, \@both);
