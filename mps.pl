@@ -1,8 +1,10 @@
 #!/usr/bin/perl -w
 ##
 
+	use strict;
 	use CGI qw(:standard);
 	use CGI::Carp 'fatalsToBrowser';
+	our (@pdfs, @docs, $datasheetPath);
 	print header;
 	print start_html("Knurled Widgets Website Tools"); #from CGI sends the top of the web page
 	print "<h1>Knurled Widgets Website Tools</h1>\n";
@@ -11,7 +13,7 @@
 	print end_html; # CGI: sends the end of the html
 
 	sub print_form {
-		$method="GET";  
+		my $method="GET";  
 			
 			      
 		print start_form($method);
@@ -26,9 +28,9 @@
 		print "<p><em>List datasheets which occur</em><br>";
 		print checkbox_group(
 							-name=>'datasheetOccurrence',
-							-values=>[in_pdf,in_doc,in_both],
+							-values=>['in_pdf','in_doc','in_both'],
 							-linebreak=>'yes',
-							-defaults=>[in_both]);
+							-defaults=>['in_both']);
 
 		print "<p><em>Apache log count of pdf request and doc requests for datasheets in both formats</em><br>",
 			radio_group(
@@ -55,7 +57,7 @@
 
 		if (@datasheetOccurrence) {
 			
-			listFiles($datasheetPath);
+			listFiles($datasheetPath, $datasheetPath);
 		
 			if (grep(/^in_pdf$/, @datasheetOccurrence)) {
 
@@ -73,7 +75,7 @@
 
 			if (grep(/^in_both$/, @datasheetOccurrence)) {
 
-				getMatching(\@pdfs, \@docs);
+				my @both = getMatching(\@pdfs, \@docs);
 				print "<h2>List of dual format datasheets</h2>";
 				print @both;
 
@@ -102,16 +104,16 @@
 		my @files = map("$path/$_", grep (!/^\.{1,2}$/, readdir(DIR)));
 		closedir(DIR);
 
-		foreach $file(@files) {
+		foreach my $file(@files) {
 			if (-f $file) {
 				$file =~ s/^$datasheetPath\///;
 				if ($file =~ m/^.*\.pdf$/i) {
 					$file =~ s/\.pdf$//i;
-					push(@pdfs, $file . "<br />");
+					push(our @pdfs, $file . "<br />");
 				}
 				elsif ($file =~ m/^.*\.doc$/i) {
 					$file =~ s/\.doc$//i;
-					push(@docs, $file . "<br />");
+					push(our @docs, $file . "<br />");
 				}
 			}
 			elsif (-d $file) {
@@ -119,17 +121,18 @@
 			}
 		}
 
-		@pdfs = sort(@pdfs);
-		@docs = sort(@docs);
+		our @pdfs = sort(@pdfs);
+		our @docs = sort(@docs);
 
 	}
 
 	sub getMatching{
 		my ($ref_arr1, $ref_arr2) = @_;
-
+		my @both;
 		my @arr1 = @{$ref_arr1};
 		my @arr2 = @{$ref_arr2};
 		my $matching = {};
+		my %matching;
 
 		for (@arr1) {
 			$matching{$_}++;
@@ -141,4 +144,6 @@
 		push(@both, $_) for (grep {$matching{$_} > 1} keys %matching);
 
 		@both = sort(@both);
+
+		return @both;
 	}
