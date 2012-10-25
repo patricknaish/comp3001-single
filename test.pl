@@ -2,23 +2,16 @@
 
 $startPath = shift or die "No arguments provided";
 
+our (%matching, $matching);
+
 @pdfs = ();
 @docs = ();
 @both = ();
 
 listFiles($startPath);
 getMatching(\@pdfs, \@docs);
+parseLog("access.log");
 
-print "\@pdfs contains " . scalar(@pdfs) . "\n";
-print "\@docs contains " . scalar(@docs) . "\n";
-print "\@both contains " . scalar(@both) . "\n";
-
-print "\n=====PDFS=====\n";
-print @pdfs;
-print "\n=====DOCS=====\n";
-print @docs;
-print "\n=====BOTH======\n";
-print @both;
 
 sub listFiles{
 	my $path = shift;
@@ -54,7 +47,7 @@ sub getMatching{
 
 	my @arr1 = @{$ref_arr1};
 	my @arr2 = @{$ref_arr2};
-	my $matching = {};
+	$matching = {};
 
 	for (@arr1) {
 		$matching{$_}++;
@@ -68,3 +61,35 @@ sub getMatching{
 	@both = sort(@both);
 }
 
+sub parseLog{
+	my %hashmap;
+	foreach my $file(@both) {
+		$hashmap{$file}++;
+	}
+	my $path = shift;
+	my $doccount = 0;
+	my (@logdocs, @logpdfs, @split);
+	-f $path or die "$path is not a file";
+	open LOG, $path or die "$path could not be opened";
+	while (my $line = <LOG>) {
+		if ($line =~ m/GET \/(\w+\/?)+\.doc/i) {
+			$line =~ s/(.*$startPath\/|\.doc.*$)//ig;
+			chomp($line);
+			$line = $line . "<br />";
+			if (defined $hashmap{$line}) {
+				$doccount++;
+			}
+		}
+		elsif ($line =~ m/GET \/(\w+\/?)+\.pdf/i) {
+			$line =~ s/(.*$startPath\/|\.pdf.*$)//ig;
+			chomp($line);
+			$line = $line . "<br />";
+			if (defined $hashmap{$line}) {
+				$pdfcount++;
+			}
+		}
+	}
+	close LOG;
+	print $doccount;
+	print $pdfcount;
+}

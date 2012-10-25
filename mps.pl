@@ -56,9 +56,10 @@
 		my @logCount = param('logCount');
 
 		if (@datasheetOccurrence) {
-			
-			listFiles($datasheetPath, $datasheetPath);
 		
+			listFiles($datasheetPath, $datasheetPath);
+			my @both = getMatching(\@pdfs, \@docs);
+
 			if (grep(/^in_pdf$/, @datasheetOccurrence)) {
 
 				print "<h2>List of pdf datasheets</h2>";
@@ -74,8 +75,6 @@
 			}
 
 			if (grep(/^in_both$/, @datasheetOccurrence)) {
-
-				my @both = getMatching(\@pdfs, \@docs);
 				print "<h2>List of dual format datasheets</h2>";
 				print @both;
 
@@ -85,12 +84,16 @@
 
 		if (grep(/^yes$/, @logCount)) {
 
+			my @both = getMatching(\@pdfs, \@docs);
+
+			my ($doccount, $pdfcount) = parseLog($logPath, @both);
+
 			print "<h2>Number of pdf requests for dual format datasheets = ";
-			#do stuff
+			print $pdfcount;
 			print "</h2>";
 
 			print "<h2>Number of doc requests for dual format datasheets = ";
-			#do stuff
+			print $doccount;
 			print "</h2>";
 
 		}
@@ -99,6 +102,7 @@
 
 	sub listFiles{
 		my $path = shift;
+		-d $path or die "$path is not a directory";
 		opendir(DIR, $path) or die "Could not open $path";
 		
 		my @files = map("$path/$_", grep (!/^\.{1,2}$/, readdir(DIR)));
@@ -146,4 +150,38 @@
 		@both = sort(@both);
 
 		return @both;
+	}
+
+	sub parseLog{
+		my $path = $_[0];
+		-f $path or die "$path is not a file";
+		my $doccount = 0;
+		my $pdfcount = 0;
+		my %dualhash;
+		my @both = $_[1];
+		foreach my $file(@both) {
+			$dualhash{$file}++;
+		}
+		-f $path or die "$path is not a file";
+		open LOG, $path or die "$path could not be opened";
+		while (my $line = <LOG>) {
+			if ($line =~ m/GET \/(\w+\/?)+\.doc/i) {
+				$line =~ s/(.*$datasheetPath\/|\.doc.*$)//ig;
+				chomp($line);
+				$line = $line . "<br />";
+				if (defined $dualhash{$line}) {
+					$doccount++;
+				}
+			}
+			elsif ($line =~ m/GET \/(\w+\/?)+\.pdf/i) {
+				$line =~ s/(.*$datasheetPath\/|\.pdf.*$)//ig;
+				chomp($line);
+				$line = $line . "<br />";
+				if (defined $dualhash{$line}) {
+					$pdfcount++;
+				}
+			}
+		}
+		close LOG;
+		return ($doccount, $pdfcount);
 	}
