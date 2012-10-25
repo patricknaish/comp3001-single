@@ -8,7 +8,7 @@
 
 	our (@pdfs, @docs, $datasheetPath); #Global vars
 
-	print header; Sset the headers
+	print header; #Set the headers
 	print start_html("Knurled Widgets Website Tools"); #Print the opening HTML
 	print "<h1>Knurled Widgets Website Tools</h1>\n"; #Display a title
 	print_form(); #Print the form for user input
