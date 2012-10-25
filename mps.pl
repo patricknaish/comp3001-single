@@ -86,7 +86,7 @@
 
 			my @both = getMatching(\@pdfs, \@docs);
 
-			my ($doccount, $pdfcount) = parseLog($logPath, @both);
+			my ($doccount, $pdfcount) = parseLog($logPath, \@both);
 
 			print "<h2>Number of pdf requests for dual format datasheets = ";
 			print $pdfcount;
