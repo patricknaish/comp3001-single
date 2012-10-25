@@ -153,12 +153,12 @@
 	}
 
 	sub parseLog{
-		my $path = $_[0];
+		my ($path, $ref_both) = @_;
 		-f $path or die "$path is not a file";
 		my $doccount = 0;
 		my $pdfcount = 0;
 		my %dualhash;
-		my @both = $_[1];
+		my @both = @{$ref_both};
 		foreach my $file(@both) {
 			$dualhash{$file}++;
 		}
