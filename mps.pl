@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 ##
-
+	
+	use strict;
 	use CGI qw(:standard);
 	use CGI::Carp 'fatalsToBrowser';
 	print header;
@@ -11,8 +12,7 @@
 	print end_html; # CGI: sends the end of the html
 
 	sub print_form {
-		$method="GET";  
-			
+		my $method="GET";  
 			      
 		print start_form($method);
 		print "<em>Path for the datasheet hierarchy root?</em><br>";
@@ -26,9 +26,9 @@
 		print "<p><em>List datasheets which occur</em><br>";
 		print checkbox_group(
 							-name=>'datasheetOccurrence',
-							-values=>[in_pdf,in_doc,in_both],
+							-values=>['in_pdf','in_doc','in_both'],
 							-linebreak=>'yes',
-							-defaults=>[in_both]);
+							-defaults=>'in_both');
 
 		print "<p><em>Apache log count of pdf request and doc requests for datasheets in both formats</em><br>",
 			radio_group(
@@ -48,14 +48,14 @@
 		my $method = $ENV{'REQUEST_METHOD'};
 		my $query = $ENV{'QUERY_STRING'};
 
-		$datasheetPath = param('datasheetPath');
+		my $datasheetPath = param('datasheetPath');
 		my $logPath = param('logPath');
 		my @datasheetOccurrence = param('datasheetOccurrence');
 		my @logCount = param('logCount');
 
 		if (@datasheetOccurrence) {
 			
-			listFiles($datasheetPath);
+			my (@pdfs, @docs) = listFiles($datasheetPath, $datasheetPath);
 		
 			if (grep(/^in_pdf$/, @datasheetOccurrence)) {
 
@@ -73,7 +73,7 @@
 
 			if (grep(/^in_both$/, @datasheetOccurrence)) {
 
-				getMatching(\@pdfs, \@docs);
+				my @both = getMatching(\@pdfs, \@docs);
 				print "<h2>List of dual format datasheets</h2>";
 				print @both;
 
@@ -96,15 +96,19 @@
 	}
 
 	sub listFiles{
-		my $path = shift;
+		my $path = $_[0];
+		my $originalPath = $_[1];
 		opendir(DIR, $path) or die "Could not open $path";
 		
 		my @files = map("$path/$_", grep (!/^\.{1,2}$/, readdir(DIR)));
 		closedir(DIR);
 
-		foreach $file(@files) {
+		my @pdfs;
+		my @docs;
+
+		foreach my $file(@files) {
 			if (-f $file) {
-				$file =~ s/^$datasheetPath\///;
+				$file =~ s/^$originalPath\///;
 				if ($file =~ m/^.*\.pdf$/i) {
 					$file =~ s/\.pdf$//i;
 					push(@pdfs, $file . "<br />");
@@ -115,30 +119,33 @@
 				}
 			}
 			elsif (-d $file) {
-				listFiles($file);
+				listFiles($file, $originalPath);
 			}
 		}
 
 		@pdfs = sort(@pdfs);
 		@docs = sort(@docs);
 
+		return (@pdfs, @docs);
+
 	}
 
 	sub getMatching{
-		my ($ref_arr1, $ref_arr2) = @_;
+		my ($rarr1, $rarr2) = @_;
 
-		my @arr1 = @{$ref_arr1};
-		my @arr2 = @{$ref_arr2};
+		my @arr1 = @{$rarr1};
+		my @arr2 = @{$rarr2};
 		my $matching = {};
+		our (%matching);
+		my @both;
 
-		for (@arr1) {
-			$matching{$_}++;
-		}
-		for (@arr2) {
+		for (@arr1, @arr2) {
 			$matching{$_}++;
 		}
 
 		push(@both, $_) for (grep {$matching{$_} > 1} keys %matching);
 
 		@both = sort(@both);
+
+		return @both;
 	}
